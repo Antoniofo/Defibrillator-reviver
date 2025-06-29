@@ -31,7 +31,6 @@ namespace Defibrillator
             EventHandlers = new EventHandler();
             Exiled.Events.Handlers.Server.RoundStarted += EventHandlers.OnStart;
             Exiled.Events.Handlers.Server.RoundEnded += EventHandlers.OnRoundEnd;
-            Exiled.Events.Handlers.Player.EscapingPocketDimension += Pocket;
 
             CustomItem.RegisterItems();
         }
@@ -40,18 +39,11 @@ namespace Defibrillator
         {
             Exiled.Events.Handlers.Server.RoundStarted -= EventHandlers.OnStart;
             Exiled.Events.Handlers.Server.RoundEnded -= EventHandlers.OnRoundEnd;
-            Exiled.Events.Handlers.Player.EscapingPocketDimension -= Pocket;
             EventHandlers = null;
             Instance = null;
 
             CustomItem.UnregisterItems();
         }
-
-        private void Pocket(EscapingPocketDimensionEventArgs ev)
-        {
-            if(ev.TeleportPosition.TryGetRoom(out RoomIdentifier room))
-                if (room.Name == RoomName.Pocket)
-                    ev.TeleportPosition = Room.Random().Position;
-        }
+        
     }
 }

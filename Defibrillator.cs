@@ -5,6 +5,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using MapGeneration;
 using PlayerRoles;
 using UnityEngine;
 
@@ -64,6 +65,12 @@ namespace Defibrillator
         {
             if (!Check(ev.Player.CurrentItem) || ev.Item == null)
                 return;
+            if (ev.Player.CurrentRoom.RoomName == RoomName.Pocket)
+            {
+                ev.IsAllowed = false;
+                ev.Player.ShowHint($"{Plugin.Instance.Translation.hintwhenragdollisinliftwhenwarhead}", 3);
+                return;
+            }
             Ragdoll closestRagdoll = null;
             float closestDistance = float.MaxValue;
             foreach (Ragdoll ragdoll in Ragdoll.List)
