@@ -63,19 +63,22 @@ namespace Defibrillator
 
         private void OnUsing(UsingItemEventArgs ev)
         {
-            if (!Check(ev.Player.CurrentItem) || ev.Item == null)
+            Player ply = ev.Player;
+            if (ply is null) return;
+            if (!Check(ply.CurrentItem) || ev.Item == null)
                 return;
-            if (ev.Player.CurrentRoom.RoomName == RoomName.Pocket)
+            if (ply.CurrentRoom.RoomName == RoomName.Pocket)
             {
                 ev.IsAllowed = false;
-                ev.Player.ShowHint($"{Plugin.Instance.Translation.hintwhenragdollisinliftwhenwarhead}", 3);
+                ply.ShowHint($"{Plugin.Instance.Translation.hintwhenragdollisinliftwhenwarhead}", 3);
                 return;
             }
             Ragdoll closestRagdoll = null;
             float closestDistance = float.MaxValue;
             foreach (Ragdoll ragdoll in Ragdoll.List)
             {
-                float distance = Vector3.Distance(ev.Player.Position, ragdoll.Position);
+                if (ragdoll is null) continue;
+                float distance = Vector3.Distance(ply.Position, ragdoll.Position);
 
                 if (distance <= DefibrillatorRange.magnitude && distance < closestDistance)
                 {
@@ -91,11 +94,11 @@ namespace Defibrillator
                     if (closestRagdoll != null)
                     {
                         if (closestRagdoll.Owner != null && closestRagdoll.Owner.IsDead &&
-                            !closestRagdoll.Owner.IsHost && Player.List.Contains(ev.Player))
+                            !closestRagdoll.Owner.IsHost && Player.List.Contains(ply))
                         {
                             if (closestRagdoll.Role.GetTeam() != Team.SCPs)
                             {
-                                Extensions.RespawnHumanPlayer(ev.Player, closestRagdoll);
+                                Extensions.RespawnHumanPlayer(ply, closestRagdoll);
                                 ev.Item.Destroy();
                             }
                             else
@@ -103,32 +106,32 @@ namespace Defibrillator
                                 if (!Plugin.Instance.Config.SCPBlacklisted.Contains(closestRagdoll.Role) &&
                                     Plugin.Instance.Config.SCPRevive)
                                 {
-                                    Extensions.RespawnScp(ev.Player, closestRagdoll);
+                                    Extensions.RespawnScp(ply, closestRagdoll);
                                     ev.Item.Destroy();
                                 }
                                 else
                                 {
                                     ev.IsAllowed = false;
-                                    ev.Player.ShowHint($"{Plugin.Instance.Translation.BlacklistedSCPMessage}", 3);
+                                    ply.ShowHint($"{Plugin.Instance.Translation.BlacklistedSCPMessage}", 3);
                                 }
                             }
                         }
                         else
                         {
                             ev.IsAllowed = false;
-                            ev.Player.ShowHint($"{Plugin.Instance.Translation.MessageWhenARagdollnotavailable}", 3);
+                            ply.ShowHint($"{Plugin.Instance.Translation.MessageWhenARagdollnotavailable}", 3);
                         }
                     }
                     else
                     {
                         ev.IsAllowed = false;
-                        ev.Player.ShowHint($"{Plugin.Instance.Translation.hintwhenthereisnoragdollnearby}");
+                        ply.ShowHint($"{Plugin.Instance.Translation.hintwhenthereisnoragdollnearby}");
                     }
                 }
                 else
                 {
                     ev.IsAllowed = false;
-                    ev.Player.ShowHint(
+                    ply.ShowHint(
                         $"{Plugin.Instance.Translation.CooldownHint.Replace("{Cooldown}", Plugin.Instance.EventHandlers.Cooldown.ToString())}",
                         3);
                 }
@@ -136,7 +139,7 @@ namespace Defibrillator
             else
             {
                 ev.IsAllowed = false;
-                ev.Player.ShowHint(
+                ply.ShowHint(
                     $"{Plugin.Instance.Translation.TimeOfGrace.Replace("{Time}", Plugin.Instance.EventHandlers.TimeGrace.ToString())}",
                     3);
             }
