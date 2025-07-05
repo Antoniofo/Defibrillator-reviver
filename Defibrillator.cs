@@ -63,11 +63,12 @@ namespace Defibrillator
 
         private void OnUsing(UsingItemEventArgs ev)
         {
+            Log.Info("Using defibrillator");
             Player ply = ev.Player;
             if (ply is null) return;
             if (!Check(ply.CurrentItem) || ev.Item == null)
                 return;
-            if (ply.CurrentRoom.RoomName == RoomName.Pocket)
+            if (ply.CurrentRoom?.RoomName == RoomName.Pocket)
             {
                 ev.IsAllowed = false;
                 ply.ShowHint($"{Plugin.Instance.Translation.hintwhenragdollisinliftwhenwarhead}", 3);
