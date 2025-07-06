@@ -63,7 +63,6 @@ namespace Defibrillator
 
         private void OnUsing(UsingItemEventArgs ev)
         {
-            Log.Info("Using defibrillator");
             Player ply = ev.Player;
             if (ply is null) return;
             if (!Check(ply.CurrentItem) || ev.Item == null)

@@ -42,7 +42,7 @@ namespace Defibrillator
                 4);
             if (ply.CurrentRoom == Room.Get(RoomType.Pocket))
                 ply.EnableEffect(EffectType.PocketCorroding, 9999, false);
-            if (Plugin.Instance.Config.ProctetionDamageTime > 0)
+            if (Plugin.Instance.Config.ProctetionDamageTime > 0 && Warhead.DetonationTimer > 10)
             {
                 ply.EnableEffect(EffectType.SpawnProtected, Plugin.Instance.Config.ProctetionDamageTime);
             }

@@ -16,7 +16,7 @@ namespace Defibrillator
         public override string Name => "Defibrillator";
         public override string Prefix => "defibrillator";
         public override string Author => "@dzarenafixer";
-        public override Version Version { get; } = new Version(1, 4, 5);
+        public override Version Version { get; } = new Version(1, 4, 6);
         public override Version RequiredExiledVersion { get; } = new Version(9, 6, 1);
         public override PluginPriority Priority => PluginPriority.Default;
         public EventHandler EventHandlers;
